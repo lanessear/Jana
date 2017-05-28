@@ -1,0 +1,921 @@
+\documentclass{pi2}
+
+\begin{document}
+
+% Bei Gruppen mit weniger als drei Teilnehmenden 
+% einfach die Gruppennummerklammer 
+% und die entsprechenden TeilnehmerIn-Klammern leer lassen.
+%
+% z.B.: \maketitle{1}{20.11.2016}{Stefanie Schema}{}{Max Muster}{}{}
+
+% \maketitle{Übungsnummer}{Abgabedatum}{TutorIn}{Gruppennummer}
+%           {TeilnehmerIn 1}{TeilnehmerIn 2}{TeilnehmerIn 3}
+
+\maketitle{1}{30.04.2017}{Nikhil Bhardwaj}{09}
+          {Jana Göken}{Alex Rink}{Meira Iske}
+\section{PushPopy}
+Zuerst haben wir die Testklassen für ClassFiFo und ClassLiFo erstellt, die jeweils alle Methoden positiv und negativ testen.
+
+\begin{lstlisting}
+package pi.uebung01.test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import pi.uebung01.spec.ClassFiFo;
+import pi.uebung01.spec.PushPopyException;
+import pi.uebung01.spec.PushPopyInterface;
+
+public class FifoTest {
+	private PushPopyInterface<String> ppi;
+	
+	@Before
+	public void beforeCreateQueue() {
+		ppi = new ClassFiFo<String>(5);
+	
+	}
+	
+	/**
+	 * positiver push Test
+	 */
+	@Test
+	public void testPush() {
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+	}
+	
+	/**
+	 * negativer push Test
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullPush() {
+		ppi.push(null);
+	}
+	
+	/**
+	 * Overflow Test
+	 */
+	@Test(expected = PushPopyException.class)
+	public void testOverflow() {
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");		
+		ppi.push("bla");
+	}
+	
+	/**
+	 * positiver pop Test
+	 */
+	@Test
+	public void testPop() {
+		ppi.push("bla");
+		ppi.push("bli");
+		ppi.push("blub");
+		assertEquals("bla", ppi.pop());
+		assertEquals("bli", ppi.pop());
+	}
+	
+	/**
+	 * negativer pop Test
+	 */
+	@Test(expected = PushPopyException.class)
+	public void testEmptyPop(){
+		assertEquals(null, ppi.pop());
+	}
+	
+	/**
+	 * positiver isFull test
+	 */
+	@Test
+	public void testIsFull() {
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		equals(ppi.isFull());
+	}
+	
+	/**
+	 * negativer isFullTest
+	 */
+	@Test
+	public void testIsNotFull(){
+		assertEquals(false, ppi.isFull());
+	}
+	
+	/**
+	 * positiver isEmptyTest
+	 */
+	@Test
+	public void testIsEmpty() {
+		equals(ppi.isEmpty());
+	}
+	
+	/**
+	 * negativer isEmpty Test
+	 */
+	@Test
+	public void testIsNotEmpty(){
+		ppi.push("hi");
+		assertEquals(false, ppi.isEmpty());
+	}
+	
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+package pi.uebung01.test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import pi.uebung01.spec.ClassLiFo;
+import pi.uebung01.spec.PushPopyException;
+import pi.uebung01.spec.PushPopyInterface;
+
+public class LifoTest {
+
+	private PushPopyInterface<String> ppi;
+	
+	@Before
+	public void beforeCreateStack() {
+		ppi = new ClassLiFo<String>(5);
+	
+	}
+	
+	/**
+	 * positiver push Test
+	 */
+	@Test
+	public void testPush() {
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+	}
+	
+	/**
+	 * negativer push Test
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullPush() {
+		ppi.push(null);
+	}
+	
+	/**
+	 * Overflow Test
+	 */
+	@Test(expected = PushPopyException.class)
+	public void testOverflow() {
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");		
+		ppi.push("bla");
+	}
+	
+	/**
+	 * positiver pop Test
+	 */
+	@Test
+	public void testPop() {
+		ppi.push("bla");
+		ppi.push("bli");
+		ppi.push("blub");
+		assertEquals("blub", ppi.pop());
+		assertEquals("bli", ppi.pop());
+	}
+	
+	/**
+	 * negativer pop Test
+	 */
+	@Test(expected = PushPopyException.class)
+	public void testEmptyPop(){
+		assertEquals(null, ppi.pop());
+	}
+	
+	/**
+	 * positiver isFull test
+	 */
+	@Test
+	public void testIsFull() {
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		ppi.push("bla");
+		equals(ppi.isFull());
+	}
+	
+	/**
+	 * negativer isFullTest
+	 */
+	@Test
+	public void testIsNotFull(){
+		assertEquals(false, ppi.isFull());
+	}
+	
+	/**
+	 * positiver isEmptyTest
+	 */
+	@Test
+	public void testIsEmpty() {
+		equals(ppi.isEmpty());
+	}
+	
+	/**
+	 * negativer isEmpty Test
+	 */
+	@Test
+	public void testIsNotEmpty(){
+		ppi.push("hi");
+		assertEquals(false, ppi.isEmpty());
+	}
+	
+}
+
+\end{lstlisting}
+
+Die von uns erstelle Klasse ClassLiFo wird implementiert vom Interface LiFoInterFace und überschreibt sowohl die Methoden aus PushPopyInterFace als auch die Methode aus LiFoInterface.
+Bei der pop-Methode geht es in ClassLiFo darum, dass das Element, das als letzes hinzugefügt wurde, also das jüngste Element, als erstes wieder entfernt wird. Dies passiert in unsere Klasse, indem das Array, in dem sich alle Elemente vom Typ E befinden, überprüft wird. Das jüngste Element steht im Array immer an letzter Stelle (abgesehen von den unbelegten Plätzen im Array). Eine Schleife prüft, welches das erste Element ist, das null entspricht. Das Element vorher muss somit das Jüngste sein und wird ausgegeben und danach entfernt.
+
+\begin{lstlisting}
+package pi.uebung01.spec;
+
+
+public class ClassLiFo<E> implements LiFoInterface<E> {
+	
+	
+	
+	private E[] array;
+	private final int size;
+	
+	public ClassLiFo(final int bsize){
+		
+		size = bsize;
+		/**@SuppressWarnings("unchecked")
+        final E[] array = (E[]) Array.newInstance(null, bsize);
+        this.array = array; **/
+		
+        @SuppressWarnings("unchecked")
+        final E[] array = (E[])new Object[size];
+        this.array = array;
+	}
+	 /**
+	    * Fügt das Übergebene Element zu dieser Sammlung hinzu, falls noch Platz ist.
+	    *
+	    * @param pElement
+	    *           Das einzufügende Element.
+	    * @throws PushPopyException
+	    *            Falls kein Platz mehr in dieser Sammlung vorhanden ist.
+	    * @throws IllegalArgumentException
+	    *            Falls das gegebene Element den Wert {@code null} hat.
+	    */
+
+	@Override
+	public void push(E pElement) {
+		if(pElement == null){
+			throw new IllegalArgumentException("Ungültige Eingabe.");
+		}
+		if(this.isFull())
+		{
+			throw new PushPopyException("Die Sammlung ist voll.");
+		}
+		for(int i=0; i < array.length; i++){
+					if(array[i] == null){
+						array[i] = pElement;
+						return;
+					}
+		}
+			
+	}
+				
+	
+	
+	/**
+	    * Gibt an, ob diese Sammlung leer ist.
+	    *
+	    * @return {@code true} falls diese Sammlung leer ist, ansonsten {@code false}.
+	    */
+	
+	@Override
+	public boolean isEmpty() {
+		for(int x = 0; x < array.length; x++){
+		   if(array[x]!= null){
+			   return false;
+		   }
+		}
+		return true;
+	}
+
+	/**
+	    * Gibt an, ob sich in dieser Sammlung bereits maximal viele Elemente befinden.
+	    *
+	    * return {code true} falls diese Sammlung maximal viele Elemente enthält,
+	    *         ansonsten {code false}.
+	    */
+	
+	Override
+	public boolean isFull() {
+		int s =  array.length - 1;
+			if(array[s]== null){
+			return false;
+			}
+			else{
+		return true;
+			}
+	}
+    /**
+     * Die Methode entfernt einzelne Elemente aus der Sammlung. In dieser Methode wird immer das 
+     * jüngste Elemente zuerst wieder entfernt.
+     * 
+     * @return Das zu entfernende Element.
+     * 
+     * @param juengstesElement 
+     *        Das zu entferndende Element.
+     */
+	@Override
+	public E pop() {
+		
+		E juengstesElement = (E) new Object();
+		
+	    if(this.isEmpty()){
+	    	throw new PushPopyException("Die Sammlung ist leer!");
+	    }
+	    for( int d = array.length - 1; d >= 0; d--){
+	    	if(array[d] != null){
+	    		juengstesElement = array[d];
+	    		array[d] = null;
+	    		return juengstesElement;
+	    	}
+		}
+	    return juengstesElement;
+	
+	}
+}
+
+\end{lstlisting}
+
+Die Klasse ClassFiFo implementiert das Interface FiFoInterface und überschreibt ebenfalls die in PushPopyInterface gegebenen Methoden, sowie eine Methode aus FiFoInterface. Die pop-Methode soll das älteste Element zuerst entfernen. Eine Schleife durchläuft das Array und prüft ab der ersten Stelle des Arrays, welches Element zuerst nicht null ist. Dieses Element muss das bisher Älteste sein und wird entfernt. 
+
+\begin{lstlisting}
+package pi.uebung01.spec;
+
+public class ClassFiFo<E> implements FiFoInterface<E> {
+	private E[] array;
+	private int size;
+	
+	public ClassFiFo(final int bsize){
+		
+		size = bsize;
+		/**@SuppressWarnings("unchecked")
+        final E[] array = (E[]) Array.newInstance(null, bsize);
+        this.array = array; **/
+		
+        @SuppressWarnings("unchecked")
+        final E[] array = (E[])new Object[size];
+        this.array = array;
+	}
+	 /**
+	    * Fügt das Übergebene Element zu dieser Sammlung hinzu, falls noch Platz ist.
+	    *
+	    * @param pElement
+	    *           Das einzufügende Element.
+	    * @throws PushPopyException
+	    *            Falls kein Platz mehr in dieser Sammlung vorhanden ist.
+	    * @throws IllegalArgumentException
+	    *            Falls das gegebene Element den Wert {@code null} hat.
+	    */
+
+	@Override
+	public void push(E pElement) {
+		if(pElement == null){
+			throw new IllegalArgumentException("Ungültige Eingabe.");
+		}
+		if(this.isFull())
+		{
+			throw new PushPopyException("Die Sammlung ist voll.");
+		}
+		for(int i=0; i < array.length; i++){
+					if(array[i] == null){
+						array[i] = pElement;
+						return;
+					}
+		}
+			
+	}
+				
+	
+	
+	/**
+	    * Gibt an, ob diese Sammlung leer ist.
+	    *
+	    * @return {@code true} falls diese Sammlung leer ist, ansonsten {@code false}.
+	    */
+	
+	@Override
+	public boolean isEmpty() {
+		for(int x = 0; x < array.length; x++){
+		   if(array[x]!= null){
+			   return false;
+		   }
+		}
+		return true;
+	}
+
+	/**
+	    * Gibt an, ob sich in dieser Sammlung bereits maximal viele Elemente befinden.
+	    *
+	    * @return {@code true} falls diese Sammlung maximal viele Elemente enthält,
+	    *         ansonsten {@code false}.
+	    */
+	
+	@Override
+	public boolean isFull() {
+		int s =  array.length - 1;
+			if(array[s]== null){
+			return false;
+			}
+			else{
+		return true;
+			}
+	}
+    /**
+     * Die Methode entfernt einzelne Elemente aus der Sammlung. In dieser Methode wird immer das 
+     * jüngste Elemente zuerst wieder entfernt.
+     * 
+     * @return Das zu entfernende Element.
+     * 
+     * @param juengstesElement 
+     *        Das zu entferndende Element.
+     */
+	@Override
+	public E pop() {
+		
+		E aeltestesElement = (E) new Object();
+		
+	    if(this.isEmpty()){
+	    	throw new PushPopyException("Die Sammlung ist leer!");
+	    }
+	    aeltestesElement = array[0];
+	    for(int d = 1; d < array.length; d++ ){
+	    	array[d-1] = array[d];
+	    }
+	    array[array.length - 1] = null;
+	    return aeltestesElement;
+	
+	}
+}
+\end{lstlisting}
+
+\section{Labyrinth}
+
+\subsection{Plättchen}
+
+\begin{lstlisting}
+package pi.uebung01.test;
+
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+import pi.uebung01.Direction;
+import pi.uebung01.Curve;
+
+public class CurveTest {
+
+	@Test
+	public void testNorth() {
+		Curve curve = new Curve(Direction.NORTH);
+		assertEquals(curve.hasExit(Direction.NORTH), false);
+		assertEquals(curve.hasExit(Direction.EAST), true);
+		assertEquals(curve.hasExit(Direction.SOUTH), true);
+		assertEquals(curve.hasExit(Direction.WEST), false);
+	}
+	
+	@Test
+	public void testEast() {
+		Curve curve = new Curve(Direction.EAST);
+		assertEquals(curve.hasExit(Direction.NORTH), false);
+		assertEquals(curve.hasExit(Direction.EAST), false);
+		assertEquals(curve.hasExit(Direction.SOUTH), true);
+		assertEquals(curve.hasExit(Direction.WEST), true);
+	}
+	
+	@Test
+	public void testSouth() {
+		Curve curve = new Curve(Direction.SOUTH);
+		assertEquals(curve.hasExit(Direction.NORTH), true);
+		assertEquals(curve.hasExit(Direction.EAST), false);
+		assertEquals(curve.hasExit(Direction.SOUTH), false);
+		assertEquals(curve.hasExit(Direction.WEST), true);
+	}
+	
+	@Test
+	public void testWest() {
+		Curve curve = new Curve(Direction.WEST);
+		assertEquals(curve.hasExit(Direction.NORTH), true);
+		assertEquals(curve.hasExit(Direction.EAST), true);
+		assertEquals(curve.hasExit(Direction.SOUTH), false);
+		assertEquals(curve.hasExit(Direction.WEST), false);
+	}
+}
+
+\end{lstlisting}
+
+\begin{lstlisting}
+/*
+ * Copyright 2017 AG Softwaretechnik, University of Bremen, Germany
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+package pi.uebung01;
+
+/**
+ * Diese Klasse erbt von Tile und realisiert Kurvenplättchen.
+ * Die Kurvenplättchen besitzen eine Orietierung, die die Ausrichtung
+ * der Kurvenplättchen angibt.
+ */
+public final class Curve extends Tile {
+
+   /**
+    * Erzeugt ein neues KurvenPlättchen mit der gegebenen Orientierung.
+    *
+    * @param pOrientation
+    *           Die Orientierung des neuen Kurvenplättchens.
+    */
+   public Curve(final Direction pOrientation) {
+      super(pOrientation);
+   }
+   /**
+    * Überprüft, ob das Kurvenplättchen in der aktuellen Orientierung einen
+    * Ausgang in die Übergebene Himmelsrichtung hat.
+    * Falls ja, wird (@code true} zurückegegeben, ansonsten {@code false}.
+    * 
+    * @param pDirection
+    * 			Die Himmelsrichtung, auf der geprüft wird, ob das Plättchen
+    * 			dorthin einen Ausgang hat
+    * @return {@code true}, falls die angegebene Richtung entweder die nächste
+    * 			oder Übernächste Richtung nach der aktuellen Orientierung ist,
+    * 			sonst {@code false}
+    */
+   @Override
+   public boolean hasExit(final Direction pDirection) {
+	   int orientation = getOrientation().getOrdinal();
+	   if (pDirection.getOrdinal() == (orientation + 1) %4
+			   || pDirection.getOrdinal() == (orientation + 2) %4) {
+		   	return true;
+	   }
+	   return false;
+   }
+
+}
+
+\end{lstlisting}
+
+\begin{lstlisting}
+package pi.uebung01.test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import pi.uebung01.Junction;
+import pi.uebung01.Direction;
+
+public class JunctionTest {
+
+	@Test
+	public void testNorth() {
+		Junction junction = new Junction(Direction.NORTH);
+		assertEquals(junction.hasExit(Direction.NORTH), false);
+		assertEquals(junction.hasExit(Direction.EAST), true);
+		assertEquals(junction.hasExit(Direction.SOUTH), true);
+		assertEquals(junction.hasExit(Direction.WEST), true);
+	}
+	
+	@Test
+	public void testEast() {
+		Junction junction = new Junction(Direction.EAST);
+		assertEquals(junction.hasExit(Direction.NORTH), true);
+		assertEquals(junction.hasExit(Direction.EAST), false);
+		assertEquals(junction.hasExit(Direction.SOUTH), true);
+		assertEquals(junction.hasExit(Direction.WEST), true);
+	}
+	
+	@Test
+	public void testSouth() {
+		Junction junction = new Junction(Direction.SOUTH);
+		assertEquals(junction.hasExit(Direction.NORTH), true);
+		assertEquals(junction.hasExit(Direction.EAST), true);
+		assertEquals(junction.hasExit(Direction.SOUTH), false);
+		assertEquals(junction.hasExit(Direction.WEST), true);
+	}
+	
+	@Test
+	public void testWest() {
+		Junction junction = new Junction(Direction.WEST);
+		assertEquals(junction.hasExit(Direction.NORTH), true);
+		assertEquals(junction.hasExit(Direction.EAST), true);
+		assertEquals(junction.hasExit(Direction.SOUTH), true);
+		assertEquals(junction.hasExit(Direction.WEST), false);
+	}
+}
+
+\end{lstlisting}
+
+\begin{lstlisting}
+/*
+ * Copyright 2017 AG Softwaretechnik, University of Bremen, Germany
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+package pi.uebung01;
+
+/**
+ * Diese Klasse erbt von Tile und realisiert TPlättchen.
+ * Die TPlättchen besitzen eine Orietierung, die die Ausrichtung
+ * der TPlättchen angibt.
+ */
+public final class Junction extends Tile {
+
+   /**
+    * Erzeugt ein neues TPlättchen mit der gegebenen Orientierung.
+    *
+    * @param pOrientation
+    *           Die Orientierung des neuen TPlättchens.
+    */
+   public Junction(final Direction pOrientation) {
+      super(pOrientation);
+   }
+   /**
+    * Überprüft, ob ein TPlättchen in der aktuellen Orientierung einen
+    * Ausgang in die gegebene Richtung hat.
+    * Falls dies der Fall ist, so wird {@code true} ausgegeben, sonst
+    * {@code false}.
+    * 
+    * @param pDirection
+    * 			Die Himmelsrichtung, bei der geprüft werden soll, ob
+    * 			das TPlättchen einen Ausgang in diese Himmelsrichtung
+    * 			besitzt
+    * @return {@code false}, falls die gegebene Himmelsrichtung die
+    * 			aktuelle Orientierung des TPlättchens ist, ansonsten
+    * 			wird {@code true} züruckgegeben.
+    */
+   @Override
+   public boolean hasExit(final Direction pDirection) {
+      return (pDirection.getOrdinal() != getOrientation().getOrdinal());
+   }
+
+}
+
+\end{lstlisting}
+
+\begin{lstlisting}
+package pi.uebung01.test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import pi.uebung01.Straight;
+import pi.uebung01.Direction;
+
+public class StraightTest {
+	
+	@Test
+	public void testNorth() {
+		Straight straight = new Straight(Direction.NORTH);
+		assertEquals(straight.hasExit(Direction.NORTH), true);
+		assertEquals(straight.hasExit(Direction.EAST), false);
+		assertEquals(straight.hasExit(Direction.SOUTH), true);
+		assertEquals(straight.hasExit(Direction.WEST), false);
+	}
+	
+	@Test
+	public void testEast() {
+		Straight straight = new Straight(Direction.EAST);
+		assertEquals(straight.hasExit(Direction.NORTH), false);
+		assertEquals(straight.hasExit(Direction.EAST), true);
+		assertEquals(straight.hasExit(Direction.SOUTH), false);
+		assertEquals(straight.hasExit(Direction.WEST), true);
+	}
+	
+	@Test
+	public void testSouth() {
+		Straight straight = new Straight(Direction.SOUTH);
+		assertEquals(straight.hasExit(Direction.NORTH), true);
+		assertEquals(straight.hasExit(Direction.EAST), false);
+		assertEquals(straight.hasExit(Direction.SOUTH), true);
+		assertEquals(straight.hasExit(Direction.WEST), false);
+	}
+	
+	@Test
+	public void testWest() {
+		Straight straight = new Straight(Direction.WEST);
+		assertEquals(straight.hasExit(Direction.NORTH), false);
+		assertEquals(straight.hasExit(Direction.EAST), true);
+		assertEquals(straight.hasExit(Direction.SOUTH), false);
+		assertEquals(straight.hasExit(Direction.WEST), true);
+	}
+}
+
+\end{lstlisting}
+
+\begin{lstlisting}
+/*
+ * Copyright 2017 AG Softwaretechnik, University of Bremen, Germany
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+package pi.uebung01;
+
+/**
+ * Diese Klasse erbt von Tile und realisiert GeradenPlättchen.
+ * Die GeradenPlättchen besitzen eine Orietierung, die die Ausrichtung
+ * der GeradenPlättchen angibt.
+ */
+public final class Straight extends Tile {
+
+   /**
+    * Erzeugt ein neues GeradenPlättchen mit der gegebenen Orientierung.
+    *
+    * @param pOrientation
+    *           Die Orientierung des neuen GeradenPlättchens.
+    */
+   public Straight(final Direction pOrientation) {
+      super(pOrientation);
+   }
+   
+   /**
+    * Überpräft, ob ein GeradenPlättchen in der aktuellen Orientierung einen
+    * Ausgang in die gegebene Himmelsrichtung hat.
+    * Falls dies der Fall ist, so wird {@code true} ausgegeben, sonst
+    * {@code false}.
+    * 
+    * @param pDirection
+    * 			Die Himmelsrichtung, bei der geprüft werden soll, ob
+    * 			das GeradenPlättchen einen Ausgang in diese Himmelsrichtung
+    * 			besitzt
+    * @return {@code false}, falls die gegebene Himmelsrichtung die
+    * 			aktuelle Orientierung oder die entgegen gesetzte Himmelsrichtung
+    *  			des GeradenPlättchens ist, sonst {@code false}
+    */
+   @Override
+   public boolean hasExit(final Direction pDirection) {
+	   int orientation = getOrientation().getOrdinal();
+	   return (pDirection.getOrdinal() == orientation ||
+			   			pDirection.getOrdinal() == (orientation +2) %4);
+   }
+
+}
+
+\end{lstlisting}
+
+\subsection{Spielfeld}
+
+Wir haben den Algorithmus, wie er geschildert war, implementiert. Hierbei werden die zwei Hilfsmethoden haspath und algorithmus verwendet. Die ArrayList fungiert hierbei als Kollektion.
+
+\begin{lstlisting}
+   @Override
+   public final boolean existsPath(final PieceInterface pPiece, final int pDestRow,
+         final int pDestCol) {
+      ClassLiFo<Tile> stack = new ClassLiFo<Tile>(49);
+      ClassFiFo<Tile> queue = new ClassFiFo<Tile>(49);
+      boolean a = this.algorithmus(stack, pPiece, pDestRow, pDestCol);
+      boolean b = this.algorithmus(queue, pPiece, pDestRow, pDestCol);
+      if(a != b){
+    	  throw new IllegalStateException();
+      }
+      else{
+    	  return a;
+      }
+     
+   }
+   
+   /**
+    * Die Methode erzeugt zunächst eine Sammlung vom Typ PushPopyInterface für die noch zu bearbeitenden Plättchen.
+    * Jetzt wird das Plättchen, auf dem sich die gegebene Spielfigur befindet, in die Sammlung Rand eingefügt. 
+    * Nun beginnt eine Schleife, die so oft wiederholt wird, wie sich noch Elemente in der Sammlung Rand befinden.
+    * Innerhalb der Schleife wird mittels pop() ein Plättchen P aus dem Rand entnommen.
+    * Wenn dieses Plättchen bereits das Ziel ist, wird true zurückgegeben.
+    * Anderenfalls werden für P alle Nachbarplättchen, zu denen es einen Weg gibt, in die Sammlung Rand eingefügt.
+    * Falls das Zielplättchen nicht erreichbar ist, wird false zurückgegeben.
+    * Außerdem zählt ein Zähler die Schleifendurchläufe mit.
+    * @param rand die Sammlung Rand
+    * @param p das Feld, auf dem die Spielfigur zurzeit steht
+    * @param reihe die Reihe, in der sich das Zielfeld befindet
+    * @param spalte die Spalte, in der sich das Zielfeld befindet
+    * @return der boolsche Wert, der besagt, ob es einen Pfad von dem aktuellen Plättchen bis zum Zielfeld gibt
+    */
+   public boolean algorithmus(PushPopyInterface<Tile> rand, PieceInterface p, int reihe, int spalte){
+	   rand.push(p.getTile());
+	   int zaehler = 0;
+	   
+	   List<Tile> checkedAlready = new ArrayList<>();
+	   
+	   while(rand.isEmpty() == false){
+		   ++zaehler;
+		   Tile gepopt = rand.pop();
+		   if((gepopt.getRow() == reihe) && (gepopt.getColumn()== spalte)) {
+			   System.out.println("zaehler = " + zaehler);
+			   return true;
+		   }
+		   else{
+			   if((gepopt.getRow() != 0) && (this.hasPath(gepopt, tiles[gepopt.getRow() -1][gepopt.getColumn()]))){
+				   if(!checkedAlready.contains(tiles[gepopt.getRow() -1][gepopt.getColumn()])){
+					   rand.push(tiles[gepopt.getRow() -1][gepopt.getColumn()]);
+				   }
+			   }
+			   if((gepopt.getColumn() != 0) && (this.hasPath(gepopt, tiles[gepopt.getRow() ][gepopt.getColumn() -1]))){
+				   
+				   if(!checkedAlready.contains(tiles[gepopt.getRow() ][gepopt.getColumn() -1])){
+					   rand.push(tiles[gepopt.getRow() ][gepopt.getColumn() -1]);
+				   }
+			   }
+			   if((gepopt.getRow() != 6) && (this.hasPath(gepopt, tiles[gepopt.getRow() +1][gepopt.getColumn()]))){
+				   if(!checkedAlready.contains(tiles[gepopt.getRow() +1][gepopt.getColumn()])){
+					   rand.push(tiles[gepopt.getRow() +1][gepopt.getColumn()]);
+				   }
+			   }
+			   if((gepopt.getColumn() != 6) && (this.hasPath(gepopt, tiles[gepopt.getRow() ][gepopt.getColumn() +1]))){
+				   if(!checkedAlready.contains(tiles[gepopt.getRow() ][gepopt.getColumn() +1])){
+					   rand.push(tiles[gepopt.getRow() ][gepopt.getColumn() +1]);
+				   }
+			   }
+			   
+			   checkedAlready.add(gepopt);
+		   }
+	   }
+	   System.out.println("zaehler = " + zaehler);
+	   return false;
+   }
+
+   /** 
+    * die Methode prüft, ob 2 Teile a und b eine Verbindung zueinander haben, indem sie die vier Fälle durchgeht,
+    * dass Plättchen b oberhalb, rechts von, unterhalb oder links von dem Plättchen a liegt.
+    * @param a ein beliebiges Plättchen
+    * @param b ein Nachbarplättchen von a
+    * @return der boolsche Wert, der besagt, ob es eine Verbindung von a nach b gibt
+    */
+    
+   public boolean hasPath(Tile a, Tile b){
+	   if ((a.getRow()  == b.getRow()) && (a.getColumn() +1 == b.getColumn()) && a.hasExit(EAST) && b.hasExit(WEST)){
+		   return true;
+	   }
+	   if ((a.getRow() +1 == b.getRow()) && (a.getColumn() == b.getColumn()) && a.hasExit(SOUTH) && b.hasExit(NORTH)){
+		   return true;
+	   }
+	   if ((a.getRow()  == b.getRow()) && (a.getColumn() == b.getColumn() +1) && a.hasExit(WEST) && b.hasExit(EAST)){
+		   return true;
+	   }
+	   if ((a.getRow()  == b.getRow() +1) && (a.getColumn() == b.getColumn()) && a.hasExit(NORTH) && b.hasExit(SOUTH)){
+		   return true;
+	   }
+	   else{
+		   return false;
+	   }
+   }
+\end{lstlisting}
+
+Es fällt auf, dass das LiFoInterface meist schneller zum Ziel gelangt, als das FiFoInerface. Dies liegt daran, dass der Stack sozusagen erstmal einen Weg ausprobiert und dann den nächsten wählt, wenn dieser nicht funktioniert hat. Die Queue probiert sozusagen alle Wege gleichzeitig. Bei längeren und sehr verzweigten Wegen kann dies sehr lange dauern.
+\end{document}
+
